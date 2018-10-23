@@ -109,9 +109,9 @@ abstract class Client {
       $this->last_response = $e->getResponse();
       if (!empty($this->last_response)) {
         $this->has_errors = TRUE;
-        $this->errors = json_decode($this->last_response->getBody()
-          ->getContents())->errors;
-        throw new ClientException(print_r($this->errors, TRUE), $this->last_response->getStatusCode(), $e, $this);
+	    $errorsRaw = $this->last_response->getBody()->getContents();
+	    $this->errors = empty($errorsRaw)?'':json_decode($errorsRaw)->errors;
+	    throw new ClientException(print_r($this->errors, TRUE), $this->last_response->getStatusCode(), $e, $this);
       }
       else {
         throw new ClientException('Request failed.', 0, $e, $this);
