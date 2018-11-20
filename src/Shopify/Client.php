@@ -142,40 +142,42 @@ abstract class Client {
     $this->call_bucket = $limit_parts[1];
   }
 
-  /**
-   * Perform a GET request to the Shopify API.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param array $opts
-   *   Additional options to pass to the request.
-   *
-   * @return object|array
-   *   Returns the Shopify API response JSON decoded.
-   *
-   * @see \Shopify\Client::request()
-   */
+	/**
+	 * Perform a GET request to the Shopify API.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param array  $opts
+	 *   Additional options to pass to the request.
+	 *
+	 * @return object|array
+	 *   Returns the Shopify API response JSON decoded.
+	 *
+	 * @see \Shopify\Client::request()
+	 * @throws ClientException
+	 */
   public function get($resource, array $opts = []) {
     return json_decode($this->request('GET', $resource, $opts)
       ->getBody()
       ->getContents());
   }
 
-  /**
-   * Perform a POST request to the Shopify API.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param object|array $data
-   *   Data to JSON encode and send to the API.
-   * @param array $opts
-   *   Additional options to pass to the request.
-   *
-   * @return object|array
-   *   Returns the Shopify API response JSON decoded.
-   *
-   * @see \Shopify\Client::request()
-   */
+	/**
+	 * Perform a POST request to the Shopify API.
+	 *
+	 * @param string       $resource
+	 *   Shopify resource.
+	 * @param object|array $data
+	 *   Data to JSON encode and send to the API.
+	 * @param array        $opts
+	 *   Additional options to pass to the request.
+	 *
+	 * @return object|array
+	 *   Returns the Shopify API response JSON decoded.
+	 *
+	 * @see \Shopify\Client::request()
+	 * @throws ClientException
+	 */
   public function post($resource, $data, array $opts = []) {
     $opts['json'] = $data;
     return json_decode($this->request('POST', $resource, $opts)
@@ -183,21 +185,22 @@ abstract class Client {
       ->getContents());
   }
 
-  /**
-   * Perform a PUT request to the Shopify API.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param object|array $data
-   *   Data to JSON encode and send to the API.
-   * @param array $opts
-   *   Additional options to pass to the request.
-   *
-   * @return object|array
-   *   Returns the Shopify API response JSON decoded.
-   *
-   * @see \Shopify\Client::request()
-   */
+	/**
+	 * Perform a PUT request to the Shopify API.
+	 *
+	 * @param string       $resource
+	 *   Shopify resource.
+	 * @param object|array $data
+	 *   Data to JSON encode and send to the API.
+	 * @param array        $opts
+	 *   Additional options to pass to the request.
+	 *
+	 * @return object|array
+	 *   Returns the Shopify API response JSON decoded.
+	 *
+	 * @see \Shopify\Client::request()
+	 * @throws ClientException
+	 */
   public function put($resource, $data, array $opts = []) {
     $opts['json'] = $data;
     return json_decode($this->request('PUT', $resource, $opts)
@@ -205,19 +208,20 @@ abstract class Client {
       ->getContents());
   }
 
-  /**
-   * Perform a DELETE request to the Shopify API.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param array $opts
-   *   Additional options to pass to the request.
-   *
-   * @return object|array
-   *   Returns the Shopify API response JSON decoded.
-   *
-   * @see \Shopify\Client::request()
-   */
+	/**
+	 * Perform a DELETE request to the Shopify API.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param array  $opts
+	 *   Additional options to pass to the request.
+	 *
+	 * @return object|array
+	 *   Returns the Shopify API response JSON decoded.
+	 *
+	 * @see \Shopify\Client::request()
+	 * @throws ClientException
+	 */
   public function delete($resource, array $opts = []) {
     return json_decode($this->request('DELETE', $resource, $opts)
       ->getBody()
@@ -330,27 +334,28 @@ abstract class Client {
     return hash_hmac('sha256', $data, $secret, FALSE);
   }
 
-  /**
-   * Allows you to iterate over paginated resources.
-   * This will return a single resource at a time to the iterator.
-   *
-   * @code
-   * foreach ($client->getResourcePager('products', 5) as $product) {
-   *   // API will fetch 5 products at a time.
-   *   // This will update ALL products in the store.
-   *   $client->updateProduct(['title' => $product->title . ' updated']);
-   * }
-   * @endcode
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param int $limit
-   *   Limit resources returned per request. If not set, the default_limit will be used.
-   * @param array $opts
-   *   Additional options to pass to the request. Note: You don't need to set the page/limit.
-   *
-   * @return \Generator
-   */
+	/**
+	 * Allows you to iterate over paginated resources.
+	 * This will return a single resource at a time to the iterator.
+	 *
+	 * @code
+	 * foreach ($client->getResourcePager('products', 5) as $product) {
+	 *   // API will fetch 5 products at a time.
+	 *   // This will update ALL products in the store.
+	 *   $client->updateProduct(['title' => $product->title . ' updated']);
+	 * }
+	 * @endcode
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param int    $limit
+	 *   Limit resources returned per request. If not set, the default_limit will be used.
+	 * @param array  $opts
+	 *   Additional options to pass to the request. Note: You don't need to set the page/limit.
+	 *
+	 * @return \Generator
+	 * @throws ClientException
+	 */
   public function getResourcePager($resource, $limit = NULL, array $opts = []) {
     $current_page = 1;
     if (!isset($opts['query']['limit'])) {
@@ -380,33 +385,35 @@ abstract class Client {
 
   // API abstraction functions.
 
-  /**
-   * Gets shop info.
-   *
-   * @param array $fields
-   *   Specific fields to return.
-   *
-   * @return object
-   */
+	/**
+	 * Gets shop info.
+	 *
+	 * @param array $fields
+	 *   Specific fields to return.
+	 *
+	 * @return object
+	 * @throws ClientException
+	 */
   public function getShopInfo(array $fields = []) {
     $opts['query']['fields'] = implode(',', $fields);
     return $this->get('shop', $opts)->shop;
   }
 
-  /**
-   * Gets all resources matching the query from the server.
-   *
-   * This will fetch ALL resources from the server. May use multiple requests
-   * depending on the number of items being returned.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param array $opts
-   *   Additional options.
-   *
-   * @return array
-   *   Returns all resource items as an array.
-   */
+	/**
+	 * Gets all resources matching the query from the server.
+	 *
+	 * This will fetch ALL resources from the server. May use multiple requests
+	 * depending on the number of items being returned.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param array  $opts
+	 *   Additional options.
+	 *
+	 * @return array
+	 *   Returns all resource items as an array.
+	 * @throws ClientException
+	 */
   public function getResources($resource, array $opts = []) {
     $items = [];
     foreach ($this->getResourcePager($resource, NULL, $opts) as $item) {
@@ -415,162 +422,173 @@ abstract class Client {
     return $items;
   }
 
-  /**
-   * Loads a Shopify resource by it's ID.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param int $id
-   *   Shopify resource ID.
-   * @param array $fields
-   *   Array if field query params.
-   *
-   * @return mixed
-   */
+	/**
+	 * Loads a Shopify resource by it's ID.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param int    $id
+	 *   Shopify resource ID.
+	 * @param array  $fields
+	 *   Array if field query params.
+	 *
+	 * @return mixed
+	 * @throws ClientException
+	 */
   public function getResourceById($resource, $id, array $fields = []) {
     $opts['query']['fields'] = implode(',', $fields);
     $result = $this->get($resource . '/' . $id, $opts);
     return reset($result);
   }
 
-  /**
-   * Updates a given resource by it's ID and returns it.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param int $id
-   *   Shopify resource ID.
-   * @param array $data
-   *   Update data array.
-   *
-   * @return mixed
-   */
+	/**
+	 * Updates a given resource by it's ID and returns it.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param int    $id
+	 *   Shopify resource ID.
+	 * @param array  $data
+	 *   Update data array.
+	 *
+	 * @return mixed
+	 * @throws ClientException
+	 */
   public function updateResource($resource, $id, array $data = []) {
     $result = $this->put($resource . '/' . $id, $data);
     return reset($result);
   }
 
-  /**
-   * Deletes a Shopify resource.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   *   Shopify resource ID.
-   * @param array $opts
-   *   Options to pass to the query.
-   *
-   * @return array|object|NULL
-   */
+	/**
+	 * Deletes a Shopify resource.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 *   Shopify resource ID.
+	 * @param array  $opts
+	 *   Options to pass to the query.
+	 *
+	 * @return array|object|NULL
+	 * @throws ClientException
+	 */
   public function deleteResource($resource, $id, array $opts = []) {
     return $this->delete($resource . '/' . $id, $opts);
   }
 
-  /**
-   * Gets the count of the resource based on the passed filters.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param array $filters
-   *   Array of filters.
-   *
-   * @return int
-   *   Returns the count.
-   */
+	/**
+	 * Gets the count of the resource based on the passed filters.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param array  $filters
+	 *   Array of filters.
+	 *
+	 * @return int
+	 *   Returns the count.
+	 * @throws ClientException
+	 */
   public function getResourceCount($resource, array $filters = []) {
     $opts['query'] = $filters;
     return (int) $this->get($resource . '/count', $opts)->count;
   }
 
-  /**
-   * Creates a resource and returns it's full data.
-   *
-   * @param string $resource
-   *   Shopify resource.
-   * @param array $data
-   *   Shopify resource data.
-   *
-   * @return mixed
-   */
+	/**
+	 * Creates a resource and returns it's full data.
+	 *
+	 * @param string $resource
+	 *   Shopify resource.
+	 * @param array  $data
+	 *   Shopify resource data.
+	 *
+	 * @return mixed
+	 * @throws ClientException
+	 */
   public function createResource($resource, array $data = []) {
     $result = $this->post($resource, $data);
     return reset($result);
   }
 
-  /**
-   * Gets all products matching the filter query
-   *
-   * @param array $opts
-   *   Options to pass to the request.
-   *
-   * @return array
-   *   Array of products.
-   */
+	/**
+	 * Gets all products matching the filter query
+	 *
+	 * @param array $opts
+	 *   Options to pass to the request.
+	 *
+	 * @return array
+	 *   Array of products.
+	 * @throws ClientException
+	 */
   public function getProducts(array $opts = []) {
     return $this->getResources('products', $opts);
   }
 
-  /**
-   * Get a specific product.
-   *
-   * @param int $id
-   *   Product ID.
-   * @param array $fields
-   *   Specific product fields to return.
-   *
-   * @return object
-   */
+	/**
+	 * Get a specific product.
+	 *
+	 * @param int   $id
+	 *   Product ID.
+	 * @param array $fields
+	 *   Specific product fields to return.
+	 *
+	 * @return object
+	 * @throws ClientException
+	 */
   public function getProduct($id, array $fields = []) {
     return $this->getResourceById('products', $id, $fields);
   }
 
-  /**
-   * Count products based on passed filters.
-   *
-   * @param array $filters
-   *   Filters.
-   *
-   * @return int
-   */
+	/**
+	 * Count products based on passed filters.
+	 *
+	 * @param array $filters
+	 *   Filters.
+	 *
+	 * @return int
+	 * @throws ClientException
+	 */
   public function getProductsCount(array $filters = []) {
     return $this->getResourceCount('products', $filters);
   }
 
-  /**
-   * Creates a product.
-   *
-   * @param array $product
-   *   A valid Shopify product.
-   *
-   * @return object
-   */
+	/**
+	 * Creates a product.
+	 *
+	 * @param array $product
+	 *   A valid Shopify product.
+	 *
+	 * @return object
+	 * @throws ClientException
+	 */
   public function createProduct(array $product = []) {
     $data = ['product' => $product];
     return $this->createResource('products', $data);
   }
 
-  /**
-   * Updates a specific product with new params.
-   *
-   * @param int $id
-   *   Product ID.
-   * @param array $update_product
-   *   New product values.
-   *
-   * @return object
-   */
+	/**
+	 * Updates a specific product with new params.
+	 *
+	 * @param int   $id
+	 *   Product ID.
+	 * @param array $update_product
+	 *   New product values.
+	 *
+	 * @return object
+	 * @throws ClientException
+	 */
   public function updateProduct($id, array $update_product = []) {
     $data['product'] = $update_product;
     return $this->updateResource('products', $id, $data);
   }
 
-  /**
-   * Deletes a specific product.
-   *
-   * @param int $id
-   *   Product ID to delete.
-   *
-   * @return object
-   */
+	/**
+	 * Deletes a specific product.
+	 *
+	 * @param int $id
+	 *   Product ID to delete.
+	 *
+	 * @return object
+	 * @throws ClientException
+	 */
   public function deleteProduct($id) {
     return $this->deleteResource('products', $id);
   }
